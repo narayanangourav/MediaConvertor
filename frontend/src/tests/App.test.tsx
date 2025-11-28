@@ -14,9 +14,9 @@ describe("App", () => {
         </BrowserRouter>
       </Provider>
     );
-    // Check for the main title or some element
-    // Since we have a "Media Converter" title in Layout
-    expect(screen.getByText(/Media/i)).toBeInTheDocument();
-    expect(screen.getByText(/Converter/i)).toBeInTheDocument();
+    // Check for the main title
+    expect(screen.getByText("Transform Your Media")).toBeInTheDocument();
+    expect(screen.getByText(/Text to Audio/i)).toBeInTheDocument();
+    expect(screen.getByText(/Video to Audio/i)).toBeInTheDocument();
   });
 });
