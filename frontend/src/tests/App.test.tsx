@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { store } from "../store/store";
+import { store } from "../service/store";
 import App from "../App";
 import { describe, it, expect } from "vitest";
 
