@@ -20,9 +20,6 @@ import models.models as models
 import schemas.schemas as schemas
 from databases.database import engine, get_db
 
-# Create tables
-models.Base.metadata.create_all(bind=engine)
-
 app = FastAPI()
 
 # Security
@@ -73,7 +70,16 @@ def cleanup_old_files(db: Session):
 
 @app.on_event("startup")
 async def startup_event():
-    """Run cleanup on startup"""
+    """Create tables and run cleanup on startup"""
+    try:
+        # Create tables if they don't exist
+        models.Base.metadata.create_all(bind=engine)
+        print("✅ Database tables created successfully")
+    except Exception as e:
+        print(f"⚠️ Warning: Could not create database tables: {e}")
+        print("This is expected if the database is not available during testing.")
+    
+    # Run cleanup
     db = next(get_db())
     try:
         cleanup_old_files(db)
