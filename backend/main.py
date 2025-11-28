@@ -16,9 +16,9 @@ from dotenv import load_dotenv
 # Load env vars immediately
 load_dotenv()
 
-import models
-import schemas
-from database import engine, get_db
+import models.models as models
+import schemas.schemas as schemas
+from databases.database import engine, get_db
 
 # Create tables
 models.Base.metadata.create_all(bind=engine)
