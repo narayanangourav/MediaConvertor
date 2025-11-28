@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+psycopg2-binary
+python-multipart
+moviepy
+gTTS
+imageio-ffmpeg
+passlib[bcrypt]
+python-jose[cryptography]
+email-validator
+python-dotenv
+pytest
+httpx
