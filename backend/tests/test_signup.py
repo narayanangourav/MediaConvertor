@@ -1,7 +1,10 @@
 import sys
 import traceback
-from database import get_db
-from models import User
+import os
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from databases.database import get_db
+from models.models import User
 from main import get_password_hash
 
 try:

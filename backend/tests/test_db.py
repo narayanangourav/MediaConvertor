@@ -1,5 +1,8 @@
 import os
-from database import SQLALCHEMY_DATABASE_URL, engine
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from databases.database import SQLALCHEMY_DATABASE_URL, engine
 from sqlalchemy import text, inspect
 
 print(f"Database URL: {SQLALCHEMY_DATABASE_URL}")
