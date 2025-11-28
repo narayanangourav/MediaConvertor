@@ -111,7 +111,10 @@ jobs:
           host: ${{ secrets.AWS_HOST }}
           username: ${{ secrets.AWS_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "docker-compose.yml"
+          # Copy the repository contents so any 'build:' contexts referenced by
+          # docker-compose are available on the remote host. You can narrow this
+          # to specific folders if you prefer (e.g. "docker-compose.yml backend frontend").
+          source: "."
           target: "~/app"
 
       - name: Deploy to AWS
@@ -122,14 +125,17 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd ~/app
-            # Login to GHCR on the server
-            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            # Use sudo for docker/docker-compose so the action's SSH user does not
+            # need direct access to the Docker socket. Many servers require sudo
+            # for docker commands or an account in the 'docker' group.
+            # Login to GHCR on the server (writes credentials to root when using sudo)
+            echo ${{ secrets.GITHUB_TOKEN }} | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-            # Pull latest images
-            docker-compose pull
+            # Pull latest images (or allow compose to build if compose references 'build:')
+            sudo docker-compose pull || true
 
-            # Restart containers
-            docker-compose up -d --remove-orphans
+            # Restart containers (use sudo)
+            sudo docker-compose up -d --remove-orphans
 
             # Cleanup unused images
-            docker image prune -f
+            sudo docker image prune -f
